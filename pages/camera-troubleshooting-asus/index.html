@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .pointer {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        .highlight {
+            background: #e1f5fe;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solución de Problemas: Cámara Integrada ASUS Windows 7</h1>
+        
+        <p>Si tu <span class="highlight">cámara integrada</span> en un <span class="highlight">portátil ASUS con Windows 7</span> no aparece ni funciona, es posible que el problema sea causado por:</p>
+        <ul>
+            <li><strong>Controlador (driver) desinstalado o desactualizado</strong></li>
+            <li><strong>Cámara deshabilitada en el sistema</strong></li>
+            <li><strong>Problemas de hardware o configuración del BIOS</strong></li>
+        </ul>
+
+        <div class="step">
+            <h2 class="success">✅ 1. Verificar si el sistema detecta la cámara</h2>
+            <ol>
+                <li>Abre <strong>CMD</strong> como administrador:
+                    <ul>
+                        <li>Presiona <code>Win + R</code>, escribe <code>cmd</code> y presiona <code>Ctrl + Shift + Enter</code></li>
+                    </ul>
+                </li>
+                <li>Escribe este comando para buscar dispositivos conectados:</li>
+            </ol>
+            <div class="code-block">wmic path win32_pnpentity get name, deviceid</div>
+            
+            <p><strong>Busca algo relacionado con la cámara</strong> como:</p>
+            <ul>
+                <li>Integrated Camera</li>
+                <li>USB Video Device</li>
+                <li>Chicony, Realtek, o ASUS Camera</li>
+            </ul>
+            <p class="pointer">👉 <strong>Si no aparece nada</strong>, es posible que el hardware esté deshabilitado o dañado. Sigue al <strong>paso 3</strong>.</p>
+        </div>
+
+        <div class="step">
+            <h2 class="success">✅ 2. Forzar la búsqueda de la cámara (escaneo de hardware)</h2>
+            <p>Si la cámara no aparece, fuerza a Windows a buscarla con este comando:</p>
+            <div class="code-block">devmgmt.msc</div>
+            
+            <p>Esto abrirá el <strong>Administrador de dispositivos</strong>. Luego:</p>
+            <ol>
+                <li>Haz clic en <strong>Acción</strong> > <strong>Buscar cambios de hardware</strong></li>
+                <li>Revisa si aparece bajo:
+                    <ul>
+                        <li>Dispositivos de imagen</li>
+                        <li>Controladoras de bus serie universal (USB)</li>
+                    </ul>
+                </li>
+            </ol>
+            <p class="pointer">👉 <strong>Si aparece con un signo amarillo (⚠️)</strong>, el problema es de <strong>controladores</strong>.</p>
+        </div>
+
+        <div class="step">
+            <h2 class="success">✅ 3. Reinstalar o reparar el controlador de la cámara</h2>
+            <ol>
+                <li>En CMD, ejecuta este comando para listar controladores:</li>
+            </ol>
+            <div class="code-block">driverquery /FO list /SI | findstr /I "camera"</div>
+            
+            <ol start="2">
+                <li>Si no encuentras nada, fuerza la reinstalación:</li>
+            </ol>
+            <div class="code-block">pnputil -e</div>
+            
+            <p>Busca un <strong>controlador de cámara</strong> (suele ser algo como <code>usbvideo.inf</code>)</p>
+            
+            <ol start="3">
+                <li>Reinstala el controlador de video con:</li>
+            </ol>
+            <div class="code-block">pnputil -i -a C:\Windows\System32\DriverStore\FileRepository\usbvideo.inf_XXXXX</div>
+
+            <div class="warning">
+                <p><strong>Alternativa manual:</strong></p>
+                <ul>
+                    <li>Descarga el controlador oficial desde: <strong>ASUS Support</strong></li>
+                    <li>Busca el modelo de tu portátil y descarga los <strong>drivers de la cámara</strong> para Windows 7</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <h2 class="success">✅ 4. Habilitar la cámara en el registro de Windows</h2>
+            <ol>
+                <li>Ejecuta <strong>CMD</strong> como administrador</li>
+                <li>Escribe:</li>
+            </ol>
+            <div class="code-block">reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam"</div>
+            
+            <ol start="3">
+                <li>Si aparece <strong>Deny</strong> o <strong>Disabled</strong>, restáuralo con:</li>
+            </ol>
+            <div class="code-block">reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\webcam" /v Value /t REG_SZ /d Allow /f</div>
+            
+            <ol start="4">
+                <li>Reinicia el equipo</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2 class="success">✅ 5. Verificar la cámara en el BIOS</h2>
+            <p>Algunos portátiles ASUS tienen la opción de <strong>deshabilitar la cámara</strong> en el <strong>BIOS</strong>. Para verificar:</p>
+            <ol>
+                <li>Reinicia tu equipo y presiona <code>F2</code> o <code>Del</code> para entrar al <strong>BIOS</strong></li>
+                <li>Busca una opción como:
+                    <ul>
+                        <li>Integrated Camera</li>
+                        <li>Webcam</li>
+                    </ul>
+                </li>
+                <li>Asegúrate de que esté en <strong>Enabled</strong> (habilitado)</li>
+                <li>Guarda los cambios (<code>F10</code>) y reinicia</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h2 class="success">✅ 6. Último recurso: Reinstalar servicios de imagen</h2>
+            <ol>
+                <li>Restaura los servicios de captura con:</li>
+            </ol>
+            <div class="code-block">sc config stisvc start= auto
+sc start stisvc</div>
+            
+            <ol start="2">
+                <li>Restablece la base de dispositivos de Windows:</li>
+            </ol>
+            <div class="code-block">sfc /scannow</div>
+            
+            <ol start="3">
+                <li>Reinicia el equipo</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <h2>🚀 Si nada funciona</h2>
+            <p>Si después de todos estos pasos la cámara sigue sin aparecer:</p>
+            <ol>
+                <li>Verifica si aparece en <strong>Administrador de dispositivos</strong></li>
+                <li>Considera que la <strong>cámara podría estar dañada físicamente</strong></li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
